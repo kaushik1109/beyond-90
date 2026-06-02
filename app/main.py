@@ -1,5 +1,10 @@
 from fastapi import FastAPI
 from api.posts import router as posts_router
+import model.posts
+
+# Creates all the new tables mentioned in the models folder
+Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI()
 
