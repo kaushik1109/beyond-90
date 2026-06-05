@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from core.database import SessionLocal, engine, Base
 from models.posts import Blog
@@ -31,4 +31,11 @@ async def add_post(blog: BlogCreate, db: Session = Depends(get_db)):
     return new_blog
 
 
+@router.get("/{id}")
+async def get_post_id(id: int, db: Session = Depends(get_db)):
+
+    post = db.query(Blog).filter(Blog.id == id).first()
+    if post is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return post
 
