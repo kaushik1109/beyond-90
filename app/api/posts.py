@@ -39,3 +39,38 @@ async def get_post_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Item not found")
     return post
 
+@router.put("/{id}")
+async def update_post(blog: BlogCreate, id: int, db:Session = Depends(get_db)):
+
+    post = db.query(Blog).filter(Blog.id == id).first()
+
+    if post is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found"
+        )
+
+    post.title = blog.title
+    post.content = blog.content
+
+    db.commit()
+    db.refresh(post)
+
+    return post
+
+@router.delete("/{id}")
+async def delete_post(id:int, db: Session = Depends(get_db)):
+    post = db.query(Blog).filter(Blog.id == id).first()
+
+    if post is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found"
+        )
+
+    db.delete(post)
+
+    db.commit()
+
+    return {
+    "message": "Post deleted successfully"}
