@@ -14,7 +14,7 @@ def get_db():
         db.close()
 
 
-@router.get("/")
+@router.get("/", response_model=BlogResponse)
 async def get_posts(db: Session = Depends(get_db)):
     posts = db.query(Blog).all()
 
@@ -31,7 +31,7 @@ async def add_post(blog: BlogCreate, db: Session = Depends(get_db)):
     return new_blog
 
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=BlogResponse)
 async def get_post_id(id: int, db: Session = Depends(get_db)):
 
     post = db.query(Blog).filter(Blog.id == id).first()
@@ -39,7 +39,7 @@ async def get_post_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Item not found")
     return post
 
-@router.put("/{id}")
+@router.put("/{id}", response_model=BlogResponse)
 async def update_post(blog: BlogCreate, id: int, db:Session = Depends(get_db)):
 
     post = db.query(Blog).filter(Blog.id == id).first()
