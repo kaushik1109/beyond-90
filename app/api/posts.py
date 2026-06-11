@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from core.database import SessionLocal, engine, Base
 from models.posts import Blog
 from schemas.blog import BlogCreate, BlogResponse
+from datetime import datetime
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -21,9 +22,14 @@ async def get_posts(db: Session = Depends(get_db)):
     return posts
 
 @router.post("/")
-async def add_post(blog: BlogCreate, db: Session = Depends(get_db)):
+async def add_post(blog: BlogCreate, 
+                  db: Session = Depends(get_db)):
 
-    new_blog = Blog(title = blog.title, content = blog.content)
+    new_blog = Blog(title = blog.title, 
+                    content = blog.content,
+                    created_at = datetime.now(),
+                    updated_at = datetime.now())
+
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
@@ -39,7 +45,9 @@ async def get_post_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Item not found")
     return post
 
-@router.put("/{id}", response_model=list[BlogResponse])
+
+
+@router.put("/{id}", response_model=BlogResponse)
 async def update_post(blog: BlogCreate, id: int, db:Session = Depends(get_db)):
 
     post = db.query(Blog).filter(Blog.id == id).first()
@@ -52,6 +60,7 @@ async def update_post(blog: BlogCreate, id: int, db:Session = Depends(get_db)):
 
     post.title = blog.title
     post.content = blog.content
+    post.updated_at = datetime.now()
 
     db.commit()
     db.refresh(post)
