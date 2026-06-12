@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from core.database import SessionLocal, engine, Base
-from models.posts import Blog
-from schemas.blog import BlogCreate, BlogResponse
+from app.core.database import SessionLocal, engine, Base
+from app.models.posts import Blog
+from app.schemas.blog import BlogCreate, BlogResponse
 from datetime import datetime
 
 router = APIRouter(prefix="/posts", tags=["posts"])
