@@ -1,8 +1,8 @@
 from sqlalchemy import Integer, String, Column, Text, DateTime
-from core.database import Base
+from app.core.database import Base
 
 class User(Base):
-    __tablename__="user"
+    __tablename__="users"
 
     id = Column(Integer, primary_key = True, index = True)
     name = Column(String)

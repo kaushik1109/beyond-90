@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, String, Column, Text, DateTime
-from core.database import Base
+from app.core.database import Base
 
 class Blog(Base):
     __tablename__ = "blogs"

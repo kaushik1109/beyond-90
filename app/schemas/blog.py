@@ -1,4 +1,4 @@
-from core.database import Base
+from app.core.database import Base
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
 
